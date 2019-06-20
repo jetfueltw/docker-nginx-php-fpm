@@ -26,7 +26,7 @@ RUN set -ex \
     --with-png-dir=/usr/include/ \
     --with-jpeg-dir=/usr/include/ \
     --with-webp-dir=/usr/include/ \
- && docker-php-ext-install pdo_mysql bcmath gd
+ && docker-php-ext-install opcache bcmath gd pdo_mysql
 
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
