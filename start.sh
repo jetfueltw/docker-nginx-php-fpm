@@ -10,12 +10,13 @@ if [ -f /var/www/app/docker/nginx/default.conf ]; then
 fi
 
 if [ ! -z "$PHP_POST_MAX_SIZE" ]; then
-  sed -i "s/upload_max_filesize = 100M/upload_max_filesize = ${PHP_POST_MAX_SIZE}M/g" /usr/local/etc/php/conf.d/docker-var.ini
-  sed -i "s/post_max_size = 100M/post_max_size = ${PHP_POST_MAX_SIZE}M/g" /usr/local/etc/php/conf.d/docker-var.ini
+  sed -i "s/client_max_body_size [[:digit:]]\+m;/client_max_body_size ${PHP_POST_MAX_SIZE}m;/g" /etc/nginx/nginx.conf
+  sed -i "s/upload_max_filesize = [[:digit:]]\+M/upload_max_filesize = ${PHP_POST_MAX_SIZE}M/g" /usr/local/etc/php/conf.d/docker-var.ini
+  sed -i "s/post_max_size = [[:digit:]]\+M/post_max_size = ${PHP_POST_MAX_SIZE}M/g" /usr/local/etc/php/conf.d/docker-var.ini
 fi
 
 if [ ! -z "$PHP_MEMORY_LIMIT" ]; then
-  sed -i "s/memory_limit = 128M/memory_limit = ${PHP_MEMORY_LIMIT}M/g" /usr/local/etc/php/conf.d/docker-var.ini
+  sed -i "s/memory_limit = [[:digit:]]\+M/memory_limit = ${PHP_MEMORY_LIMIT}M/g" /usr/local/etc/php/conf.d/docker-var.ini
 fi
 
 exec /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf
