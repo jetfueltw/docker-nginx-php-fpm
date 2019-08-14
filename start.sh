@@ -19,4 +19,8 @@ if [ ! -z "$PHP_MEMORY_LIMIT" ]; then
   sed -i "s/memory_limit = [[:digit:]]\+M/memory_limit = ${PHP_MEMORY_LIMIT}M/g" /usr/local/etc/php/conf.d/docker-var.ini
 fi
 
-exec /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf
+if [ -z "$SKIP_CHOWN" ]; then
+  chown -Rf nginx:nginx /var/www
+fi
+
+exec /usr/bin/supervisord -n -c /etc/supervisord.conf

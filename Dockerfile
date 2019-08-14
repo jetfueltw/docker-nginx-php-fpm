@@ -41,7 +41,7 @@ COPY nginx/nginx.conf /etc/nginx/nginx.conf
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 COPY php-fpm/www.conf /usr/local/etc/php-fpm.d/www.conf
 COPY php-fpm/docker-var.ini /usr/local/etc/php/conf.d/docker-var.ini
-COPY supervisor/supervisord.conf /etc/supervisor/supervisord.conf
+COPY supervisor/supervisord.conf /etc/supervisord.conf
 COPY start.sh /start.sh
 
 RUN chmod 755 /start.sh
