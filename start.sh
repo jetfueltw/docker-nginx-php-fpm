@@ -20,7 +20,7 @@ if [ ! -z "$PHP_MEMORY_LIMIT" ]; then
 fi
 
 if [ -z "$SKIP_CHOWN" ]; then
-  chown -Rf nginx:nginx /var/www
+  chown -Rf nginx:nginx /var/www/*
 fi
 
 exec /usr/bin/supervisord -n -c /etc/supervisord.conf
