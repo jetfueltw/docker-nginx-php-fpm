@@ -44,7 +44,7 @@ COPY php-fpm/docker-var.ini /usr/local/etc/php/conf.d/docker-var.ini
 COPY supervisor/supervisord.conf /etc/supervisord.conf
 COPY start.sh /start.sh
 
-RUN chmod 755 /start.sh
+RUN rm -rf /var/www/html && chmod 755 /start.sh
 
 WORKDIR /var/www/app
 # COPY app .
