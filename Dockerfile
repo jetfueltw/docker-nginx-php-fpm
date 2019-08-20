@@ -16,7 +16,7 @@ RUN set -ex \
 
 RUN set -ex \
  && apk update && apk upgrade \
- && apk add --no-cache freetype-dev libxpm-dev libpng-dev libjpeg-turbo-dev libwebp-dev \
+ && apk add --no-cache freetype-dev libxpm-dev libpng-dev libjpeg-turbo-dev libwebp-dev libzip-dev \
     git \
     nginx \
     supervisor \
@@ -29,7 +29,8 @@ RUN set -ex \
     --with-png-dir=/usr/include/ \
     --with-jpeg-dir=/usr/include/ \
     --with-webp-dir=/usr/include/ \
- && docker-php-ext-install opcache bcmath gd pdo_mysql \
+ && docker-php-ext-configure zip --with-libzip=/usr/include/ \
+ && docker-php-ext-install opcache bcmath gd zip pdo_mysql \
  && EXPECTED_COMPOSER_SIGNATURE=$(wget -q -O - https://composer.github.io/installer.sig) \
  && php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
  && php -r "if (hash_file('SHA384', 'composer-setup.php') === '${EXPECTED_COMPOSER_SIGNATURE}') { echo 'Composer.phar installer verified'; } else { echo 'Composer.phar installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" \
