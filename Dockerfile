@@ -40,12 +40,16 @@ RUN set -ex \
 
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY php-fpm/php-fpm.conf /usr/local/etc/php-fpm.conf
 COPY php-fpm/www.conf /usr/local/etc/php-fpm.d/www.conf
 COPY php-fpm/docker-var.ini /usr/local/etc/php/conf.d/docker-var.ini
 COPY supervisor/supervisord.conf /etc/supervisord.conf
 COPY start.sh /start.sh
 
-RUN rm -rf /var/www/html && chmod 755 /start.sh
+RUN rm /usr/local/etc/php-fpm.d/docker.conf \
+ && rm /usr/local/etc/php-fpm.d/zz-docker.conf \
+ && rm -rf /var/www/html \
+ && chmod 755 /start.sh
 
 WORKDIR /var/www/app
 # COPY app .

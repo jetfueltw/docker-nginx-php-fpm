@@ -10,7 +10,7 @@ if [ -f /var/www/app/docker/nginx/default.conf ]; then
 fi
 
 if [ -f /var/www/app/docker/supervisor/program.conf ]; then
-  cp /var/www/app/docker/supervisor/program.conf /etc/supervisor/conf.d/program.conf
+  mkdir -p /etc/supervisor/conf.d && cp /var/www/app/docker/supervisor/program.conf /etc/supervisor/conf.d/program.conf
 fi
 
 if [ ! -z "$PHP_POST_MAX_SIZE" ]; then
