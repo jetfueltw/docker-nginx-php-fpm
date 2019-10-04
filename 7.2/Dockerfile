@@ -1,4 +1,4 @@
-FROM php:7.2-fpm-alpine3.9
+FROM php:7.2-fpm-alpine
 
 RUN set -ex \
  && KEY_SHA512="e7fa8303923d9b95db37a77ad46c68fd4755ff935d0a534d26eba83de193c76166c68bfe7f65471bf8881004ef4aa6df3e34689c305662750c0172fca5d8552a *stdin" \
