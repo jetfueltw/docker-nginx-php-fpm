@@ -12,17 +12,13 @@ RUN set -ex \
         exit 1; \
     fi \
  && printf "%s%s%s\n" "http://nginx.org/packages/alpine/v" `egrep -o '^[0-9]+\.[0-9]+' /etc/alpine-release` "/main" | tee -a /etc/apk/repositories \
- && apk del .cert-deps 
+ && apk del .cert-deps
 
 RUN set -ex \
  && apk update && apk upgrade \
- && apk add --no-cache freetype-dev libxpm-dev libpng-dev libjpeg-turbo-dev libwebp-dev libzip-dev \
-    git \
-    nginx \
-    supervisor \
- # forward request and error logs to docker log collector
- && ln -sf /dev/stdout /var/log/nginx/access.log \
- && ln -sf /dev/stderr /var/log/nginx/error.log \
+ && apk add --no-cache freetype-dev libxpm-dev libpng-dev libjpeg-turbo-dev libwebp-dev libzip-dev librdkafka-dev \
+    git nginx supervisor \
+ # install php extension
  && docker-php-ext-configure gd \
     --with-freetype-dir=/usr/include/ \
     --with-xpm-dir=/usr/include/ \
@@ -31,12 +27,24 @@ RUN set -ex \
     --with-webp-dir=/usr/include/ \
  && docker-php-ext-configure zip --with-libzip=/usr/include/ \
  && docker-php-ext-install opcache bcmath gd zip pdo_mysql \
+ # install php extension via pecl install
+ && apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS \
+ && pecl install rdkafka \
+ && docker-php-ext-enable rdkafka \
+ && apk del .phpize-deps \
+ # install composer and prestissimo
  && EXPECTED_COMPOSER_SIGNATURE=$(wget -q -O - https://composer.github.io/installer.sig) \
  && php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
  && php -r "if (hash_file('SHA384', 'composer-setup.php') === '${EXPECTED_COMPOSER_SIGNATURE}') { echo 'Composer.phar installer verified'; } else { echo 'Composer.phar installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" \
  && php composer-setup.php --install-dir=/usr/bin --filename=composer \
  && php -r "unlink('composer-setup.php');" \
- && composer global require hirak/prestissimo
+ && composer global require hirak/prestissimo \
+ # remove unnecessary file
+ && rm /usr/local/etc/php-fpm.d/docker.conf \
+ && rm /usr/local/etc/php-fpm.d/zz-docker.conf \
+ # forward request and error logs to docker log collector
+ && ln -sf /dev/stdout /var/log/nginx/access.log \
+ && ln -sf /dev/stderr /var/log/nginx/error.log
 
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
@@ -46,14 +54,12 @@ COPY php-fpm/docker-var.ini /usr/local/etc/php/conf.d/docker-var.ini
 COPY supervisor/supervisord.conf /etc/supervisord.conf
 COPY start.sh /start.sh
 
-RUN rm /usr/local/etc/php-fpm.d/docker.conf \
- && rm /usr/local/etc/php-fpm.d/zz-docker.conf \
- && rm -rf /var/www/html \
- && chmod 755 /start.sh
+# https://github.com/moby/moby/issues/34819
+RUN chmod 755 /start.sh
+
+# COPY --chown=www-data:www-data app /var/www/app
 
 WORKDIR /var/www/app
-# COPY app .
-
 EXPOSE 80
 
 CMD ["/start.sh"]
