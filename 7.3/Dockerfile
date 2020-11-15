@@ -44,8 +44,9 @@ COPY supervisor/supervisord.conf /etc/supervisord.conf
 COPY start.sh /start.sh
 
 # https://github.com/moby/moby/issues/34819
-RUN chmod 755 /start.sh
+RUN chmod +x /start.sh;
 
+# test phpinfo
 # COPY --chown=www-data:www-data app /var/www/app
 
 WORKDIR /var/www/app
