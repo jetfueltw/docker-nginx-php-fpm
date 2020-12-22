@@ -9,6 +9,18 @@ if [ -f /var/www/app/docker/nginx/default.conf ]; then
   cp /var/www/app/docker/nginx/default.conf /etc/nginx/conf.d/default.conf
 fi
 
+if [ -f /var/www/app/docker/php-fpm/php-fpm.conf ]; then
+  cp /var/www/app/docker/php-fpm/php-fpm.conf /usr/local/etc/php-fpm.conf
+fi
+
+if [ -f /var/www/app/docker/php-fpm/www.conf ]; then
+  cp /var/www/app/docker/php-fpm/www.conf /usr/local/etc/php-fpm.d/www.conf
+fi
+
+if [ -f /var/www/app/docker/php-fpm/docker-var.ini ]; then
+  cp /var/www/app/docker/php-fpm/docker-var.ini /usr/local/etc/php/conf.d/docker-var.ini
+fi
+
 if [ -f /var/www/app/docker/supervisor/program.conf ]; then
   mkdir -p /etc/supervisor/conf.d && cp /var/www/app/docker/supervisor/program.conf /etc/supervisor/conf.d/program.conf
 fi

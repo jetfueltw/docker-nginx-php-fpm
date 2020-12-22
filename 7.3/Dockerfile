@@ -1,6 +1,7 @@
 FROM php:7.3-fpm-alpine
 
 RUN set -ex \
+ # install package
  && apk update && apk upgrade \
  && apk add --no-cache freetype-dev libxpm-dev libpng-dev libjpeg-turbo-dev libwebp-dev libzip-dev librdkafka-dev \
     git nginx supervisor \
@@ -18,14 +19,17 @@ RUN set -ex \
  && pecl install rdkafka redis \
  && rm -rf /tmp/pear \
  && docker-php-ext-enable rdkafka redis \
- && apk del .phpize-deps \
- # install composer and prestissimo
+ && apk del .phpize-deps
+
+RUN set -ex \
+ # install composer
  && EXPECTED_COMPOSER_SIGNATURE=$(wget -q -O - https://composer.github.io/installer.sig) \
  && php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
- && php -r "if (hash_file('SHA384', 'composer-setup.php') === '${EXPECTED_COMPOSER_SIGNATURE}') { echo 'Composer.phar installer verified'; } else { echo 'Composer.phar installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" \
+ && php -r "if (hash_file('sha384', 'composer-setup.php') === '${EXPECTED_COMPOSER_SIGNATURE}') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" \
  && php composer-setup.php --install-dir=/usr/bin --filename=composer \
- && php -r "unlink('composer-setup.php');" \
- && composer global require hirak/prestissimo \
+ && php -r "unlink('composer-setup.php');"
+
+RUN set -ex \
  # remove unnecessary file
  && rm /usr/local/etc/php-fpm.d/docker.conf \
  && rm /usr/local/etc/php-fpm.d/zz-docker.conf \
