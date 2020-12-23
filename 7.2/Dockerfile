@@ -30,6 +30,8 @@ RUN set -ex \
  && php -r "unlink('composer-setup.php');"
 
 RUN set -ex \
+ # use the default production configuration
+ && cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini  \
  # remove unnecessary file
  && rm /usr/local/etc/php-fpm.d/docker.conf \
  && rm /usr/local/etc/php-fpm.d/zz-docker.conf \
