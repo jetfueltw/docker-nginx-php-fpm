@@ -1,4 +1,4 @@
-FROM php:7.3-fpm-alpine
+FROM php:7.4-fpm-alpine
 
 RUN set -ex \
  # install package
@@ -7,11 +7,9 @@ RUN set -ex \
     git nginx supervisor \
  # install php extension
  && docker-php-ext-configure gd \
-    --with-freetype-dir=/usr/include/ \
-    --with-png-dir=/usr/include/ \
-    --with-jpeg-dir=/usr/include/ \
-    --with-webp-dir=/usr/include/ \
- && docker-php-ext-configure zip --with-libzip=/usr/include/ \
+    --with-freetype=/usr/include/ \
+    --with-jpeg=/usr/include/ \
+    --with-webp=/usr/include/ \
  && docker-php-ext-install opcache bcmath gd zip pdo_mysql \
  # install php extension via pecl install
  && apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS \

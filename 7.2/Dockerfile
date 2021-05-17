@@ -3,12 +3,11 @@ FROM php:7.2-fpm-alpine
 RUN set -ex \
  # install package
  && apk update && apk upgrade \
- && apk add --no-cache freetype-dev libxpm-dev libpng-dev libjpeg-turbo-dev libwebp-dev libzip-dev librdkafka-dev \
+ && apk add --no-cache freetype-dev libpng-dev libjpeg-turbo-dev libwebp-dev libzip-dev librdkafka-dev \
     git nginx supervisor \
  # install php extension
  && docker-php-ext-configure gd \
     --with-freetype-dir=/usr/include/ \
-    --with-xpm-dir=/usr/include/ \
     --with-png-dir=/usr/include/ \
     --with-jpeg-dir=/usr/include/ \
     --with-webp-dir=/usr/include/ \
