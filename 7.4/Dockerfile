@@ -50,7 +50,7 @@ COPY start.sh /start.sh
 RUN chmod +x /start.sh;
 
 # test phpinfo
-# COPY --chown=www-data:www-data app /var/www/app
+#COPY --chown=www-data:www-data app /var/www/app
 
 WORKDIR /var/www/app
 EXPOSE 80

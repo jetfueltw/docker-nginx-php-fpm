@@ -57,7 +57,7 @@ COPY start.sh /start.sh
 RUN chmod +x /start.sh;
 
 # test phpinfo
-# COPY --chown=nginx:nginx app /var/www/app
+#COPY --chown=nginx:nginx app /var/www/app
 
 WORKDIR /var/www/app
 EXPOSE 80
