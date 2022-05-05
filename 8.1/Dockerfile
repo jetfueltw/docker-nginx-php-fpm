@@ -1,4 +1,4 @@
-FROM php:8.0-fpm-alpine
+FROM php:8.1-fpm-alpine
 
 RUN set -ex \
  && apk update && apk upgrade \
