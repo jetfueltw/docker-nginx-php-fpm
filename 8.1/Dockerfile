@@ -44,11 +44,11 @@ RUN set -ex \
  && rm /usr/local/etc/php-fpm.d/docker.conf \
  && rm /usr/local/etc/php-fpm.d/zz-docker.conf
 
+COPY nginx/nginx.conf /etc/nginx/nginx.conf
+COPY nginx/default.conf /etc/nginx/http.d/default.conf
+
 COPY php-fpm/docker-var.ini /usr/local/etc/php/conf.d/docker-var.ini
 COPY php-fpm/www.conf /usr/local/etc/php-fpm.d/www.conf
-
-COPY nginx/nginx.conf /etc/nginx/nginx.conf
-COPY nginx/http.d /etc/nginx/http.d
 
 COPY supervisor/supervisord.conf /etc/supervisord.conf
 
