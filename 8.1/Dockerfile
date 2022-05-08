@@ -42,7 +42,9 @@ RUN set -ex \
  && cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini \
  # remove unnecessary file
  && rm /usr/local/etc/php-fpm.d/docker.conf \
- && rm /usr/local/etc/php-fpm.d/zz-docker.conf
+ && rm /usr/local/etc/php-fpm.d/zz-docker.conf \
+ # fix /var/lib/nginx permission denied
+ && chown -Rf www-data:www-data /var/lib/nginx
 
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 COPY nginx/default.conf /etc/nginx/http.d/default.conf
