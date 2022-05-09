@@ -53,6 +53,6 @@ RUN chmod +x /start.sh;
 #COPY --chown=www-data:www-data app /var/www/app
 
 WORKDIR /var/www/app
-EXPOSE 80
 
+EXPOSE 80
 CMD ["/start.sh"]

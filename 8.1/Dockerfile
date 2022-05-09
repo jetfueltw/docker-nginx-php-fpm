@@ -62,6 +62,6 @@ RUN chmod +x /start.sh;
 #COPY --chown=nginx:nginx app /var/www/app
 
 WORKDIR /var/www/app
-EXPOSE 80
 
+EXPOSE 80
 CMD ["/start.sh"]
