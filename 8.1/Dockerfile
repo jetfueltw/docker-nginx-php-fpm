@@ -13,7 +13,7 @@ RUN set -ex \
     --with-jpeg \
     --with-webp \
     --with-freetype \
- && docker-php-ext-install opcache bcmath gd pdo_mysql \
+ && docker-php-ext-install opcache bcmath gd pcntl pdo_mysql \
  && pecl install redis \
  && docker-php-ext-enable redis \
  && rm -rf /tmp/pear \
