@@ -54,12 +54,10 @@ COPY php-fpm/www.conf /usr/local/etc/php-fpm.d/www.conf
 
 COPY supervisor/supervisord.conf /etc/supervisord.conf
 
-# https://github.com/moby/moby/issues/34819
-COPY start.sh /start.sh
-RUN chmod +x /start.sh;
+COPY --chmod=755 start.sh /start.sh
 
 # test phpinfo
-#COPY --chown=nginx:nginx app /var/www/app
+#COPY --chown=www-data:www-data app /var/www/app
 
 WORKDIR /var/www/app
 
