@@ -9,21 +9,35 @@ RUN set -ex \
     libjpeg-turbo-dev \
     libwebp-dev \
     freetype-dev \
+    icu-dev \
+    libzip-dev \
  && docker-php-ext-configure gd \
     --with-jpeg \
     --with-webp \
     --with-freetype \
- && docker-php-ext-install opcache bcmath gd pcntl pdo_mysql \
+ && docker-php-ext-install gd \
+ && docker-php-ext-configure intl \
+ && docker-php-ext-install intl \
+ && docker-php-ext-install zip \
+ && docker-php-ext-install pcntl \
+ && docker-php-ext-install opcache \
+ && docker-php-ext-install bcmath \
+ && docker-php-ext-install pdo_mysql \
  && pecl install redis \
  && docker-php-ext-enable redis \
  && rm -rf /tmp/pear \
- && apk del .phpize-deps \
+ && apk del .phpize-deps
+
+RUN set -ex \
  # install package
  && apk add --no-cache \
     libpng \
     libjpeg-turbo \
     libwebp \
     freetype \
+    icu-libs \
+    icu-data-full \
+    libzip \
     bash \
     git \
     nginx \
@@ -57,7 +71,7 @@ COPY supervisor/supervisord.conf /etc/supervisord.conf
 COPY --chmod=755 start.sh /start.sh
 
 # test phpinfo
-#COPY --chown=www-data:www-data app /var/www/app
+# COPY --chown=www-data:www-data app /var/www/app
 
 WORKDIR /var/www/app
 
