@@ -1,6 +1,26 @@
 # docker-nginx-php-fpm
 
+```bash
+# login (required by --push)
+docker login
 
+# create a multi-arch builder (or switch to it if it already exists: docker buildx use multiarch)
+docker buildx create --name multiarch --driver docker-container --bootstrap --use
+
+# build and push php7.4 (compiled from source with the PHP2Shell fix: CVE-2026-109618, CVE-2026-109619)
+docker buildx build \
+    --platform linux/amd64,linux/arm64 \
+    --pull --push --no-cache \
+    -t jetfueltw/nginx-php-fpm:7.4 \
+    -t jetfueltw/nginx-php-fpm:7.4-php2shell \
+    7.4
+
+# build and push php8.2
+docker buildx build \
+    --platform linux/amd64,linux/arm64 \
+    --pull --push --no-cache \
+    -t jetfueltw/nginx-php-fpm:8.2 \
+    8.2
 
 # run
 docker run --rm -p 80:80 jetfueltw/nginx-php-fpm:8.2
