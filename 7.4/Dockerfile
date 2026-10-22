@@ -3,7 +3,7 @@ FROM php:7.4-fpm-alpine
 RUN set -ex \
  # install package
  && apk update && apk upgrade \
- && apk add --no-cache freetype-dev libpng-dev libjpeg-turbo-dev libwebp-dev libzip-dev librdkafka-dev \
+ && apk add --no-cache freetype-dev libpng-dev libjpeg-turbo-dev libwebp-dev libzip-dev \
     git nginx supervisor \
  # install php extension
  && docker-php-ext-configure gd \
@@ -13,9 +13,9 @@ RUN set -ex \
  && docker-php-ext-install opcache bcmath gd zip pdo_mysql \
  # install php extension via pecl install
  && apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS \
- && pecl install rdkafka redis \
+ && pecl install redis \
  && rm -rf /tmp/pear \
- && docker-php-ext-enable rdkafka redis \
+ && docker-php-ext-enable redis \
  && apk del .phpize-deps
 
 RUN set -ex \
