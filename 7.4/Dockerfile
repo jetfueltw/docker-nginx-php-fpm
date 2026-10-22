@@ -1,8 +1,8 @@
 FROM php:7.4-fpm-alpine
 
 RUN set -ex \
- # install package
  && apk update && apk upgrade \
+ # install package
  && apk add --no-cache freetype-dev libpng-dev libjpeg-turbo-dev libwebp-dev libzip-dev \
     git nginx supervisor \
  # install php extension
@@ -40,13 +40,16 @@ RUN set -ex \
 
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
+
 COPY php-fpm/php-fpm.conf /usr/local/etc/php-fpm.conf
 COPY php-fpm/www.conf /usr/local/etc/php-fpm.d/www.conf
+
 COPY php-fpm/docker-var.ini /usr/local/etc/php/conf.d/docker-var.ini
+
 COPY supervisor/supervisord.conf /etc/supervisord.conf
-COPY start.sh /start.sh
 
 # https://github.com/moby/moby/issues/34819
+COPY start.sh /start.sh
 RUN chmod +x /start.sh;
 
 # test phpinfo
