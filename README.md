@@ -47,13 +47,17 @@ docker image inspect jetfueltw/nginx-php-fpm:7.4 --format '{{.Os}}/{{.Architectu
 docker push jetfueltw/nginx-php-fpm:7.4
 ```
 
-<!--
-# verify platforms
-docker buildx imagetools inspect jetfueltw/nginx-php-fpm:7.4
+# Test local build
 
-# verify php version and modules
-docker run --rm --entrypoint sh jetfueltw/nginx-php-fpm:7.4 -c 'php -v; php -m'
+```bash
+# build the local image for testing
+docker build --pull -t jetfueltw/nginx-php-fpm:7.4-local 7.4
+
+docker run --rm jetfueltw/nginx-php-fpm:7.4-local php -v
+docker run --rm jetfueltw/nginx-php-fpm:7.4-local php -m
+docker run --rm jetfueltw/nginx-php-fpm:7.4-local php -i > phpinfo.txt
+docker run --rm jetfueltw/nginx-php-fpm:7.4-local cat /usr/local/etc/php/php.ini > php.ini
 
 # verify the PHP2Shell fix (expect 1)
-docker run --rm --platform linux/amd64 --entrypoint sh jetfueltw/nginx-php-fpm:7.4 -c 'grep -c zend_new_array_singleton /usr/local/sbin/php-fpm'
--->
+docker run --rm jetfueltw/nginx-php-fpm:7.4-local sh -c 'grep -c zend_new_array_singleton /usr/local/sbin/php-fpm'
+```
